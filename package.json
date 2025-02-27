@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "netlify-build": "next build"
   },
   "dependencies": {
     "@farcaster/core": "^0.15.6",
