@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ImageResponse } from "next/og";
 import React from "react";
 
 // Define Channel type directly in this file
@@ -53,8 +52,6 @@ async function fetchChannels(): Promise<Channel[]> {
   }
 }
 
-export const runtime = 'edge';
-
 export async function GET(request: NextRequest) {
   try {
     // Get page from query params
@@ -71,85 +68,34 @@ export async function GET(request: NextRequest) {
     const paginatedChannels = allChannels.slice(startIndex, endIndex);
     const totalPages = Math.ceil(allChannels.length / ITEMS_PER_PAGE);
     
-    // Generate the image
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#111827',
-            color: 'white',
-            padding: '40px 20px',
-            fontFamily: 'sans-serif',
-          }}
-        >
-          <h1 style={{ fontSize: '48px', marginBottom: '20px', textAlign: 'center' }}>
-            New Farcaster Channels - Page {page}
-          </h1>
-          
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
-            gap: '20px',
-            width: '100%',
-            maxWidth: '1000px'
-          }}>
-            {paginatedChannels.map((channel) => (
-              <div key={channel.id} style={{ 
-                display: 'flex', 
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '15px',
-                backgroundColor: '#1f2937',
-                borderRadius: '12px',
-                overflow: 'hidden'
-              }}>
-                <img 
-                  src={channel.imageUrl || 'https://placehold.co/100x100/374151/FFFFFF/png?text=No+Image'} 
-                  width="80" 
-                  height="80" 
-                  style={{ borderRadius: '50%', marginBottom: '10px' }}
-                  alt={channel.name}
-                />
-                <div style={{ 
-                  fontSize: '18px', 
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  maxWidth: '100%'
-                }}>
-                  {channel.name}
-                </div>
-                <div style={{ fontSize: '14px', color: '#9ca3af' }}>
-                  {channel.memberCount} members
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div style={{ 
-            marginTop: '30px', 
-            fontSize: '18px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
-          }}>
-            <span>Page {page} of {totalPages}</span>
-          </div>
-        </div>
-      ),
-      {
-        width: 1200,
-        height: 630,
-      }
-    );
+    // Create a dynamic image using Cloudinary's text overlay features
+    // This is more reliable than the ImageResponse API on Netlify
+    
+    // Base URL for Cloudinary
+    const cloudinaryBaseUrl = "https://res.cloudinary.com/demo/image/upload";
+    
+    // Create a background with text overlays for each channel
+    let imageUrl = `${cloudinaryBaseUrl}/w_1200,h_630,c_fill,g_center,b_rgb:111827/l_text:Arial_64_bold:New%20Farcaster%20Channels%20-%20Page%20${page},co_white,c_fit,w_800/fl_layer_apply,g_north,y_80`;
+    
+    // Add channel names as text overlays
+    paginatedChannels.forEach((channel, index) => {
+      const row = Math.floor(index / 3); // 3 columns
+      const col = index % 3;
+      const x = -300 + (col * 300); // Adjust x position based on column
+      const y = 50 + (row * 120);   // Adjust y position based on row
+      
+      // Add channel name
+      imageUrl += `/l_text:Arial_24_bold:${encodeURIComponent(channel.name)},co_white,c_fit,w_250/fl_layer_apply,g_center,x_${x},y_${y}`;
+      
+      // Add member count below name
+      imageUrl += `/l_text:Arial_18:${channel.memberCount}%20members,co_rgb:9ca3af,c_fit,w_250/fl_layer_apply,g_center,x_${x},y_${y + 30}`;
+    });
+    
+    // Add pagination info at the bottom
+    imageUrl += `/l_text:Arial_24:Page%20${page}%20of%20${totalPages},co_white,c_fit,w_300/fl_layer_apply,g_south,y_50`;
+    
+    // Redirect to the generated image
+    return NextResponse.redirect(imageUrl);
   } catch (error) {
     console.error("Error generating image:", error);
     // Return a fallback image on error
