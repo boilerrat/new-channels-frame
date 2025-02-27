@@ -21,11 +21,4 @@
 [functions]
   included_files = ["node_modules/@vercel/og/**/*"]
   node_bundler = "esbuild"
-  external_node_modules = ["@vercel/og"]
-
-# Redirect all requests to the Next.js app
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/nextjs-server"
-  status = 200
-  force = true 
+  external_node_modules = ["@vercel/og"] 
