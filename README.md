@@ -20,6 +20,7 @@ A Next.js application that showcases popular Farcaster channels using Farcaster 
 - **Data Fetching**: Server Components + API Routes
 - **State Management**: React Hooks + nuqs for URL state
 - **API Integration**: Neynar API for Farcaster data
+- **Deployment**: Netlify with Next.js plugin
 
 ## Getting Started
 
@@ -33,8 +34,8 @@ A Next.js application that showcases popular Farcaster channels using Farcaster 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/channels-frame.git
-cd channels-frame
+git clone https://github.com/boilerrat/new-channels-frame.git
+cd new-channels-frame
 ```
 
 2. Install dependencies:
@@ -71,20 +72,29 @@ To integrate this frame into your Farcaster posts, add the following HTML to you
 
 ```html
 <meta property="fc:frame" content="vNext" />
-<meta property="fc:frame:image" content="https://your-deployed-url.com/api/image?page=1" />
-<meta property="fc:frame:post_url" content="https://your-deployed-url.com/api/frame" />
+<meta property="fc:frame:image" content="https://new-channels-frame.netlify.app/api/image?page=1" />
+<meta property="fc:frame:post_url" content="https://new-channels-frame.netlify.app/api/frame" />
 ```
 
 ## Deployment
 
-This project can be deployed on any platform that supports Next.js, such as Vercel, Netlify, or a custom server.
+This project is deployed on Netlify.
 
-For Vercel deployment:
+For Netlify deployment:
+
+1. Connect your GitHub repository to Netlify
+2. Set the build command to `npm run build`
+3. Set the publish directory to `.next`
+4. Add the environment variables in the Netlify dashboard
+5. Deploy!
+
+Alternatively, use the Netlify CLI:
 
 ```bash
-npm run build
-# or
-vercel
+npm install -g netlify-cli
+netlify login
+netlify init
+netlify deploy --prod
 ```
 
 ## License
