@@ -4,22 +4,35 @@ import { fetchChannels } from "@/lib/api/channels";
 import { ChannelGrid } from "@/components/channel-grid";
 import { generateChannelGridImageUrl } from "@/lib/frame-utils";
 
-export const metadata: Metadata = {
-  title: "Farcaster Channels Frame",
-  description: "Discover popular Farcaster channels",
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
+  
+  return {
     title: "Farcaster Channels Frame",
     description: "Discover popular Farcaster channels",
-    images: [
-      {
-        url: "https://placekitten.com/1200/630",
-        width: 1200,
-        height: 630,
-        alt: "Farcaster Channels Frame",
-      },
-    ],
-  },
-};
+    openGraph: {
+      title: "Farcaster Channels Frame",
+      description: "Discover popular Farcaster channels",
+      images: [
+        {
+          url: `${baseUrl}/api/image?page=1`,
+          width: 1200,
+          height: 630,
+          alt: "Farcaster Channels Frame",
+        },
+      ],
+    },
+    other: {
+      // Frame metadata
+      "fc:frame": "vNext",
+      "fc:frame:image": `${baseUrl}/api/image?page=1`,
+      "fc:frame:post_url": `${baseUrl}/api/frame`,
+      "fc:frame:button:1": "",
+      "fc:frame:button:2": "Next",
+      "fc:frame:state": "page:1",
+    },
+  };
+}
 
 export default async function Home() {
   // Fetch channels on the server
@@ -27,7 +40,6 @@ export default async function Home() {
   
   // Generate frame metadata
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
-  const imageUrl = generateChannelGridImageUrl(channels.slice(0, 9), 1);
   
   return (
     <main className="container mx-auto px-4 py-8">
@@ -41,20 +53,6 @@ export default async function Home() {
           </p>
         </div>
       </header>
-      
-      {/* Frame metadata */}
-      <head>
-        <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:image" content={`${baseUrl}/api/image?page=1`} />
-        <meta property="fc:frame:post_url" content={`${baseUrl}/api/frame`} />
-        <meta property="fc:frame:button:1" content="" />
-        <meta property="fc:frame:button:2" content="Next" />
-        <meta property="fc:frame:state" content="page:1" />
-        <meta
-          name="description"
-          content="This is a Farcaster Frame that showcases new channels on the Farcaster network."
-        />
-      </head>
       
       <section className="w-full py-12">
         <div className="container px-4 md:px-6">
