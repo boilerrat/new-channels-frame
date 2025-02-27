@@ -4,7 +4,7 @@ import { fetchChannels } from "@/lib/api/channels";
 import { ChannelGrid } from "@/components/channel-grid";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
   
   return {
     title: "Farcaster Channels Frame",
@@ -38,7 +38,7 @@ export default async function Home() {
   const channels = await fetchChannels();
   
   // Generate frame metadata
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
   
   return (
     <main className="container mx-auto px-4 py-8">
