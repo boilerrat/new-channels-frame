@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "netlify-build": "NETLIFY_NEXT_PLUGIN_SKIP=false next build"
+    "netlify-build": "next build"
   },
   "dependencies": {
     "@farcaster/core": "^0.15.6",

@@ -1,46 +1,34 @@
 // This file is used to override the default Next.js server function
 // It ensures that the Next.js app is properly initialized on Netlify
 
+const path = require('path');
 const { builder } = require('@netlify/functions');
-const { NextRequest } = require('next/server');
-const { NextServer } = require('next/dist/server/next-server');
 
-// Initialize the Next.js server
-const nextServer = new NextServer({
-  hostname: 'localhost',
-  port: 3000,
-  dir: '.',
-  dev: false,
-  conf: {
-    basePath: '',
-    distDir: '.next',
-  },
-});
+// Get the path to the Next.js standalone server
+const nextServerPath = path.join(process.cwd(), '.next/standalone/server.js');
 
-const requestHandler = nextServer.getRequestHandler();
+// Import the Next.js server
+let nextServer;
+try {
+  // Dynamically import the Next.js server
+  nextServer = require(nextServerPath);
+} catch (error) {
+  console.error('Error importing Next.js server:', error);
+}
 
-async function handler(event) {
+async function handler(event, context) {
   try {
-    // Create a Next.js request from the Netlify event
-    const url = new URL(event.rawUrl);
-    const nextReq = new NextRequest(url, {
-      headers: new Headers(event.headers),
-      method: event.httpMethod,
-      body: event.body ? Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8') : null,
-    });
+    // If we couldn't import the Next.js server, return an error
+    if (!nextServer) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'Failed to initialize Next.js server' }),
+      };
+    }
 
-    // Process the request with Next.js
-    const response = await requestHandler(nextReq);
-    
-    // Convert the response to Netlify format
-    const responseHeaders = Object.fromEntries(response.headers.entries());
-    
-    return {
-      statusCode: response.status,
-      headers: responseHeaders,
-      body: await response.text(),
-      isBase64Encoded: false,
-    };
+    // Process the request with the Next.js server
+    const response = await nextServer(event, context);
+    return response;
   } catch (error) {
     console.error('Error processing request:', error);
     return {

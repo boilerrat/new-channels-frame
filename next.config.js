@@ -20,7 +20,7 @@ const nextConfig = {
         hostname: 'i.imgur.com',
       },
     ],
-    unoptimized: process.env.NODE_ENV === 'production' && process.env.NETLIFY === 'true',
+    unoptimized: true,
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -35,6 +35,8 @@ const nextConfig = {
       allowedOrigins: ['localhost:3000', 'warpcast-new-channels.netlify.app'],
     },
   },
+  // Disable React strict mode for production
+  reactStrictMode: false,
 };
 
 module.exports = nextConfig;
