@@ -13,9 +13,6 @@ export async function GET(request: NextRequest) {
     const endIndex = startIndex + 9;
     const channels = allChannels.slice(startIndex, endIndex);
     
-    // Create a simple text representation of the channels for the image
-    const channelNames = channels.map(channel => channel.name).join(',');
-    
     // Use a service like Satori or Vercel OG Image Generation API
     // For now, we'll use a simple placeholder with the page number
     const imageUrl = `https://placehold.co/1200x630/111827/FFFFFF/png?text=New+Farcaster+Channels+-+Page+${page}`;

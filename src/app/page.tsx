@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import { fetchChannels } from "@/lib/api/channels";
 import { ChannelGrid } from "@/components/channel-grid";
-import { generateChannelGridImageUrl } from "@/lib/frame-utils";
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
