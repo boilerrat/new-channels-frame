@@ -1,11 +1,11 @@
 [build]
-  command = "npm run netlify-build"
+  command = "npm run build"
   publish = ".next"
 
 [build.environment]
-  NETLIFY_NEXT_PLUGIN_SKIP = "false"
   NODE_VERSION = "20.10.0"
   NPM_FLAGS = "--legacy-peer-deps"
+  NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -19,18 +19,9 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 [functions]
-  included_files = [
-    "node_modules/@vercel/og/**/*",
-    ".next/standalone/**",
-    ".next/static/**"
-  ]
+  included_files = ["node_modules/@vercel/og/**/*"]
   node_bundler = "esbuild"
-  external_node_modules = [
-    "@vercel/og",
-    "next",
-    "react",
-    "react-dom"
-  ]
+  external_node_modules = ["@vercel/og"]
 
 # Redirect all requests to the Next.js app
 [[redirects]]
