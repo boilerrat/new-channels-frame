@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchChannels } from "@/lib/api/channels";
 import { validateFrameMessage } from "@/lib/frame-validation";
-import { generateChannelGridImageUrl } from "@/lib/frame-utils";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -49,8 +48,14 @@ export async function POST(request: NextRequest) {
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedChannels = allChannels.slice(startIndex, endIndex);
     
-    // Generate image URL for the current page
-    const imageUrl = generateChannelGridImageUrl(paginatedChannels, page);
+    // Use the proper base URL
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
+    
+    // Get the top 3 channel names to display in the image
+    const topChannelNames = paginatedChannels.slice(0, 3).map(c => c.name).join(", ");
+    
+    // Create a simple image URL with the page number and some channel names
+    const imageUrl = `https://placehold.co/1200x630/111827/FFFFFF/png?text=New+Farcaster+Channels+-+Page+${page}%0AChannels:+${encodeURIComponent(topChannelNames)}`;
     
     // Determine button labels based on pagination
     const buttons = [];
@@ -66,9 +71,6 @@ export async function POST(request: NextRequest) {
       buttons.push(""); // Empty button for layout consistency
     }
     
-    // Use the proper base URL
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
-    
     // Generate frame HTML response
     const html = `
       <!DOCTYPE html>
@@ -82,7 +84,7 @@ export async function POST(request: NextRequest) {
           <meta property="fc:frame:state" content="page:${page}" />
           <title>New Channels Frame</title>
           <meta property="og:title" content="New Channels on Farcaster" />
-          <meta property="og:image" content="${baseUrl}/api/og" />
+          <meta property="og:image" content="${imageUrl}" />
         </head>
         <body>
           <h1>New Channels Frame</h1>

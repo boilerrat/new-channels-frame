@@ -6,6 +6,14 @@ import { ChannelGrid } from "@/components/channel-grid";
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
   
+  // Fetch channels for the first page
+  const allChannels = await fetchChannels();
+  const topChannels = allChannels.slice(0, 3);
+  const topChannelNames = topChannels.map(c => c.name).join(", ");
+  
+  // Create a simple image URL with the page number and some channel names
+  const imageUrl = `https://placehold.co/1200x630/111827/FFFFFF/png?text=New+Farcaster+Channels+-+Page+1%0AChannels:+${encodeURIComponent(topChannelNames)}`;
+  
   return {
     title: "Farcaster Channels Frame",
     description: "Discover popular Farcaster channels",
@@ -14,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Discover popular Farcaster channels",
       images: [
         {
-          url: `${baseUrl}/api/image?page=1`,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: "Farcaster Channels Frame",
@@ -24,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
     other: {
       // Frame metadata
       "fc:frame": "vNext",
-      "fc:frame:image": `${baseUrl}/api/image?page=1`,
+      "fc:frame:image": imageUrl,
       "fc:frame:post_url": `${baseUrl}/api/frame`,
       "fc:frame:button:1": "",
       "fc:frame:button:2": "Next",
@@ -39,6 +47,9 @@ export default async function Home() {
   
   // Generate frame metadata
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
+  const topChannels = channels.slice(0, 3);
+  const topChannelNames = topChannels.map(c => c.name).join(", ");
+  const imageUrl = `https://placehold.co/1200x630/111827/FFFFFF/png?text=New+Farcaster+Channels+-+Page+1%0AChannels:+${encodeURIComponent(topChannelNames)}`;
   
   return (
     <main className="container mx-auto px-4 py-8">
@@ -83,7 +94,7 @@ export default async function Home() {
         <div className="bg-gray-100 p-4 rounded-md">
           <code className="text-sm break-all">
             {`<meta property="fc:frame" content="vNext" />
-<meta property="fc:frame:image" content="${baseUrl}/api/image?page=1" />
+<meta property="fc:frame:image" content="${imageUrl}" />
 <meta property="fc:frame:post_url" content="${baseUrl}/api/frame" />`}
           </code>
         </div>
