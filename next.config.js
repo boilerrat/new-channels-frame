@@ -29,6 +29,12 @@ const nextConfig = {
   },
   // Add Netlify-specific configuration
   output: 'standalone',
+  // Ensure compatibility with Node.js 20
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'warpcast-new-channels.netlify.app'],
+    },
+  },
 };
 
 module.exports = nextConfig;

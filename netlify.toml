@@ -4,7 +4,7 @@
 
 [build.environment]
   NETLIFY_NEXT_PLUGIN_SKIP = "false"
-  NODE_VERSION = "18.17.0"
+  NODE_VERSION = "20.10.0"
   NPM_FLAGS = "--legacy-peer-deps"
 
 [[plugins]]
