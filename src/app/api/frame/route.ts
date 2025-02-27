@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Use the proper base URL
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
     
     // Generate frame HTML response
     const html = `

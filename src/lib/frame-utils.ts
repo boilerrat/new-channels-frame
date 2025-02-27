@@ -48,6 +48,6 @@ export function generateFrameMetadata(metadata: FrameMetadata): string {
 export function generateChannelGridImageUrl(channels: Channel[], page: number = 1): string {
   // In a real implementation, this would generate or point to a dynamic image
   // For now, we'll use a placeholder URL that would be replaced with actual image generation
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
   return `${baseUrl}/api/image?page=${page}`;
 } 
