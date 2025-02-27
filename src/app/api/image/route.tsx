@@ -68,31 +68,12 @@ export async function GET(request: NextRequest) {
     const paginatedChannels = allChannels.slice(startIndex, endIndex);
     const totalPages = Math.ceil(allChannels.length / ITEMS_PER_PAGE);
     
-    // Create a dynamic image using Cloudinary's text overlay features
-    // This is more reliable than the ImageResponse API on Netlify
+    // Use a simple, reliable image with text
+    // Get the top 3 channel names to display in the image
+    const topChannelNames = paginatedChannels.slice(0, 3).map(c => c.name).join(", ");
     
-    // Base URL for Cloudinary
-    const cloudinaryBaseUrl = "https://res.cloudinary.com/demo/image/upload";
-    
-    // Create a background with text overlays for each channel
-    let imageUrl = `${cloudinaryBaseUrl}/w_1200,h_630,c_fill,g_center,b_rgb:111827/l_text:Arial_64_bold:New%20Farcaster%20Channels%20-%20Page%20${page},co_white,c_fit,w_800/fl_layer_apply,g_north,y_80`;
-    
-    // Add channel names as text overlays
-    paginatedChannels.forEach((channel, index) => {
-      const row = Math.floor(index / 3); // 3 columns
-      const col = index % 3;
-      const x = -300 + (col * 300); // Adjust x position based on column
-      const y = 50 + (row * 120);   // Adjust y position based on row
-      
-      // Add channel name
-      imageUrl += `/l_text:Arial_24_bold:${encodeURIComponent(channel.name)},co_white,c_fit,w_250/fl_layer_apply,g_center,x_${x},y_${y}`;
-      
-      // Add member count below name
-      imageUrl += `/l_text:Arial_18:${channel.memberCount}%20members,co_rgb:9ca3af,c_fit,w_250/fl_layer_apply,g_center,x_${x},y_${y + 30}`;
-    });
-    
-    // Add pagination info at the bottom
-    imageUrl += `/l_text:Arial_24:Page%20${page}%20of%20${totalPages},co_white,c_fit,w_300/fl_layer_apply,g_south,y_50`;
+    // Create a simple image URL with the page number and some channel names
+    const imageUrl = `https://placehold.co/1200x630/111827/FFFFFF/png?text=New+Farcaster+Channels+-+Page+${page}%0AChannels:+${encodeURIComponent(topChannelNames)}`;
     
     // Redirect to the generated image
     return NextResponse.redirect(imageUrl);
