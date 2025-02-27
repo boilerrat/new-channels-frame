@@ -22,7 +22,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-semibold mt-8 mb-4">What is Farcaster?</h2>
           <p className="mb-4">
             Farcaster is a sufficiently decentralized social network built on Ethereum. 
-            It's designed to be open and composable, allowing developers to build applications on top of the network.
+            It&apos;s designed to be open and composable, allowing developers to build applications on top of the network.
           </p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">What are Frames?</h2>
@@ -36,7 +36,7 @@ export default function AboutPage() {
           <p className="mb-4">
             To use this frame in your Farcaster posts, simply copy the HTML metadata from the home page 
             and paste it into your post. When users view your post in a Farcaster client that supports frames, 
-            they'll be able to browse channels directly from your post.
+            they&apos;ll be able to browse channels directly from your post.
           </p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">Technologies Used</h2>

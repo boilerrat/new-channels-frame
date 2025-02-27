@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchChannels } from "@/lib/api/channels";
 
 // In a real implementation, this would use a library like sharp or canvas
 // to generate an image dynamically. For now, we'll return a placeholder.
 
-const ITEMS_PER_PAGE = 9;
-
 export async function GET(request: NextRequest) {
   try {
-    // Get page from query params
-    const searchParams = request.nextUrl.searchParams;
-    const page = parseInt(searchParams.get("page") || "1");
-    
     // For a real implementation, we would:
     // 1. Fetch channels for the current page
     // 2. Generate an image with those channels

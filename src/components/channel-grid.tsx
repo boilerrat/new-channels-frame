@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Channel } from "@/types/channel";
 import { ChannelCard, ChannelCardSkeleton } from "@/components/ui/channel-card";
 import { Button } from "@/components/ui/button";
@@ -20,13 +20,7 @@ export function ChannelGrid({ initialChannels }: ChannelGridProps) {
     hasPrevPage: false,
   });
 
-  useEffect(() => {
-    if (!initialChannels) {
-      fetchChannels();
-    }
-  }, [initialChannels, page]);
-
-  async function fetchChannels() {
+  const fetchChannels = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch(`/api/channels?page=${page}`);
@@ -38,7 +32,13 @@ export function ChannelGrid({ initialChannels }: ChannelGridProps) {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [page]);
+
+  useEffect(() => {
+    if (!initialChannels) {
+      fetchChannels();
+    }
+  }, [initialChannels, fetchChannels]);
 
   function handlePrevPage() {
     if (pagination.hasPrevPage) {

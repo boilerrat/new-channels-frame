@@ -1,4 +1,4 @@
-import { Channel, ChannelResponse } from "@/types/channel";
+import { Channel } from "@/types/channel";
 
 const CHANNELS_API_URL = "https://data.hubs.neynar.com/api/queries/1049/results.json?api_key=PiIHNfmLRf8rEhvFWkqqZHtW95GgSrQse7MPMmix";
 
@@ -28,23 +28,23 @@ export async function fetchChannels(): Promise<Channel[]> {
     console.log("Raw API response first row:", data.query_result.data.rows[0]);
     
     // Transform the API response to match our Channel interface
-    const channels: Channel[] = data.query_result.data.rows.map((row: any) => {
+    const channels: Channel[] = data.query_result.data.rows.map((row: Record<string, unknown>) => {
       // Generate a unique ID if channel has duplicate entries
       const uniqueId = `${row["Channel ID"]}-${Math.random().toString(36).substring(2, 6)}`;
       
       return {
-        id: row["Channel ID"] || uniqueId,
-        name: row["Channel ID"] || "Unnamed Channel", // Using Channel ID as name if not available
-        description: row["Description"] || "",
-        imageUrl: row["Image URL"] || "",
+        id: row["Channel ID"] as string || uniqueId,
+        name: row["Channel ID"] as string || "Unnamed Channel", // Using Channel ID as name if not available
+        description: row["Description"] as string || "",
+        imageUrl: row["Image URL"] as string || "",
         host: {
           fid: 0, // Not provided in this API response
-          username: row["Channel Creator"] || "",
-          displayName: row["Channel Creator"] || "Unknown",
+          username: row["Channel Creator"] as string || "",
+          displayName: row["Channel Creator"] as string || "Unknown",
           pfpUrl: "", // Not provided in this API response
         },
-        memberCount: row["Member Count"] || row["Follower Count"] || 0,
-        warpcastUrl: row["Channel URL"] || `https://warpcast.com/~/channel/${row["Channel ID"]}`,
+        memberCount: (row["Member Count"] as number) || (row["Follower Count"] as number) || 0,
+        warpcastUrl: row["Channel URL"] as string || `https://warpcast.com/~/channel/${row["Channel ID"]}`,
       };
     });
 
