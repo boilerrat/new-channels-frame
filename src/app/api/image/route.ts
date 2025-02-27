@@ -7,11 +7,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     
-    // Fetch channels for the current page
+    // Fetch channels for the current page (only needed for counting total pages)
     const allChannels = await fetchChannels();
-    const startIndex = (page - 1) * 9;
-    const endIndex = startIndex + 9;
-    const channels = allChannels.slice(startIndex, endIndex);
     
     // Use a service like Satori or Vercel OG Image Generation API
     // For now, we'll use a simple placeholder with the page number
