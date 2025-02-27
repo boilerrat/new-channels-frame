@@ -26,7 +26,7 @@ export default async function Home() {
   const channels = await fetchChannels();
   
   // Generate frame metadata
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
   const imageUrl = generateChannelGridImageUrl(channels.slice(0, 9), 1);
   
   return (
@@ -45,7 +45,7 @@ export default async function Home() {
       {/* Frame metadata */}
       <head>
         <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:image" content={imageUrl} />
+        <meta property="fc:frame:image" content={`${baseUrl}/api/image?page=1`} />
         <meta property="fc:frame:post_url" content={`${baseUrl}/api/frame`} />
         <meta property="fc:frame:button:1" content="" />
         <meta property="fc:frame:button:2" content="Next" />

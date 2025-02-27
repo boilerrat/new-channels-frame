@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     // 2. Generate an image with those channels
     // 3. Return the image with proper headers
     
-    // For now, we'll redirect to a placeholder image
+    // Use a more reliable placeholder image
     return NextResponse.redirect("https://placekitten.com/1200/630");
   } catch (error) {
     console.error("Error generating image:", error);

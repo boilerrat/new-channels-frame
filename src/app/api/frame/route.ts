@@ -66,6 +66,9 @@ export async function POST(request: NextRequest) {
       buttons.push(""); // Empty button for layout consistency
     }
     
+    // Use the proper base URL
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://new-channels-frame.vercel.app";
+    
     // Generate frame HTML response
     const html = `
       <!DOCTYPE html>
@@ -73,13 +76,13 @@ export async function POST(request: NextRequest) {
         <head>
           <meta property="fc:frame" content="vNext" />
           <meta property="fc:frame:image" content="${imageUrl}" />
-          <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/frame" />
+          <meta property="fc:frame:post_url" content="${baseUrl}/api/frame" />
           ${buttons[0] ? `<meta property="fc:frame:button:1" content="${buttons[0]}" />` : ""}
           ${buttons[1] ? `<meta property="fc:frame:button:2" content="${buttons[1]}" />` : ""}
           <meta property="fc:frame:state" content="page:${page}" />
           <title>New Channels Frame</title>
           <meta property="og:title" content="New Channels on Farcaster" />
-          <meta property="og:image" content="${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/og" />
+          <meta property="og:image" content="${baseUrl}/api/og" />
         </head>
         <body>
           <h1>New Channels Frame</h1>
