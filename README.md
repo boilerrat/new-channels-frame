@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Farcaster Channels Frame
+
+A Next.js application that showcases popular Farcaster channels using Farcaster Frames v2. This project allows users to browse and discover channels directly within Farcaster clients that support Frames.
+
+## Features
+
+- Browse popular Farcaster channels
+- Paginated navigation through channel listings
+- Responsive design for all device sizes
+- Server-side rendering for optimal performance
+- Farcaster Frame integration for in-client browsing
+
+## Tech Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **Components**: Shadcn UI
+- **Animation**: Framer Motion
+- **Data Fetching**: Server Components + API Routes
+- **State Management**: React Hooks + nuqs for URL state
+- **API Integration**: Neynar API for Farcaster data
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.17 or later
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/channels-frame.git
+cd channels-frame
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables:
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+In production, set this to your deployed URL.
+
+4. Run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Frame Integration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To integrate this frame into your Farcaster posts, add the following HTML to your post:
 
-## Learn More
+```html
+<meta property="fc:frame" content="vNext" />
+<meta property="fc:frame:image" content="https://your-deployed-url.com/api/image?page=1" />
+<meta property="fc:frame:post_url" content="https://your-deployed-url.com/api/frame" />
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project can be deployed on any platform that supports Next.js, such as Vercel, Netlify, or a custom server.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+For Vercel deployment:
 
-## Deploy on Vercel
+```bash
+npm run build
+# or
+vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgements
+
+- [Farcaster](https://www.farcaster.xyz/) for the protocol
+- [Neynar](https://neynar.com/) for the API access
+- [Warpcast](https://warpcast.com/) for the client reference
