@@ -43,19 +43,11 @@ export async function POST(request: NextRequest) {
     // Ensure page is within valid range
     page = Math.max(1, Math.min(page, totalPages));
     
-    // Get channels for the current page
-    const startIndex = (page - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const paginatedChannels = allChannels.slice(startIndex, endIndex);
-    
     // Use the proper base URL
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://warpcast-new-channels.netlify.app";
     
-    // Get the top 3 channel names to display in the image
-    const topChannelNames = paginatedChannels.slice(0, 3).map(c => c.name).join(", ");
-    
-    // Create a simple image URL with the page number and some channel names
-    const imageUrl = `https://placehold.co/1200x630/111827/FFFFFF/png?text=New+Farcaster+Channels+-+Page+${page}%0AChannels:+${encodeURIComponent(topChannelNames)}`;
+    // Use our image API endpoint to generate the frame image
+    const imageUrl = `${baseUrl}/api/image?page=${page}`;
     
     // Determine button labels based on pagination
     const buttons = [];
