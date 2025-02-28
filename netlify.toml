@@ -1,11 +1,12 @@
 [build]
-  command = "npm run build"
+  command = "npm run netlify-build"
   publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20.10.0"
   NPM_FLAGS = "--legacy-peer-deps"
   NEXT_TELEMETRY_DISABLED = "1"
+  NEXT_PUBLIC_BASE_URL = "https://warpcast-new-channels.netlify.app"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -13,10 +14,11 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "ALLOW"
+    X-Frame-Options = "ALLOW-FROM https://warpcast.com"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "frame-ancestors 'self' https://warpcast.com https://*.warpcast.com;"
 
 [functions]
   included_files = ["node_modules/@vercel/og/**/*"]

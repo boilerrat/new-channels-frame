@@ -1,5 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { fetchChannels } from "@/lib/api/channels";
+import { ImageResponse } from "@vercel/og";
+
+export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,175 +24,156 @@ export async function GET(request: NextRequest) {
       throw new Error(`Channel not found: ${channelId}`);
     }
     
-    // Generate HTML for channel detail
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <title>${channel.name}</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 0;
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-              background-color: #1e293b;
-              color: white;
-              width: 100vw;
-              height: 100vh;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-            }
-            .container {
-              max-width: 800px;
-              margin: 0 auto;
-              padding: 40px;
-              text-align: center;
-            }
-            .card {
-              background: white;
-              border-radius: 12px;
-              overflow: hidden;
-              box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-              color: #1e293b;
-              width: 100%;
-            }
-            .card-header {
-              padding: 24px;
-              background: #f1f5f9;
-              font-size: 28px;
-              font-weight: bold;
-              text-align: center;
-              border-bottom: 1px solid #e2e8f0;
-            }
-            .card-body {
-              padding: 32px;
-              font-size: 18px;
-              color: #64748b;
-              line-height: 1.6;
-            }
-            .info-row {
-              display: flex;
-              justify-content: space-between;
-              margin-top: 24px;
-              border-top: 1px solid #e2e8f0;
-              padding-top: 24px;
-            }
-            .info-item {
-              text-align: center;
-              flex: 1;
-            }
-            .info-label {
-              font-size: 14px;
-              color: #94a3b8;
-              margin-bottom: 8px;
-            }
-            .info-value {
-              font-size: 20px;
-              font-weight: bold;
-              color: #1e293b;
-            }
-            .footer {
-              margin-top: 24px;
-              font-size: 16px;
-              color: #94a3b8;
-            }
-            .button {
-              background: #3b82f6;
-              color: white;
-              border-radius: 8px;
-              padding: 12px 24px;
-              font-weight: bold;
-              margin-top: 20px;
-              display: inline-block;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="card">
-              <div class="card-header">
-                ${channel.name}
-              </div>
-              <div class="card-body">
-                <p>${channel.description || "No description available"}</p>
-                <div class="info-row">
-                  <div class="info-item">
-                    <div class="info-label">Members</div>
-                    <div class="info-value">${channel.memberCount.toLocaleString()}</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Created by</div>
-                    <div class="info-value">${channel.host.displayName}</div>
-                  </div>
-                </div>
-                <div class="button">
-                  Join Channel
-                </div>
-              </div>
+    // Generate image using @vercel/og
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "#1e293b",
+            color: "white",
+            padding: "40px",
+            fontFamily: "sans-serif",
+          }}
+        >
+          <div style={{
+            background: "white",
+            borderRadius: "12px",
+            overflow: "hidden",
+            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+            color: "#1e293b",
+            width: "100%",
+            maxWidth: "800px",
+          }}>
+            <div style={{
+              padding: "24px",
+              background: "#f1f5f9",
+              fontSize: "28px",
+              fontWeight: "bold",
+              textAlign: "center",
+              borderBottom: "1px solid #e2e8f0",
+            }}>
+              {channel.name}
             </div>
-            <div class="footer">
-              Press "Back to List" to return to all channels
+            <div style={{
+              padding: "32px",
+              fontSize: "18px",
+              color: "#64748b",
+              lineHeight: 1.6,
+            }}>
+              <p>{channel.description || "No description available"}</p>
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "24px",
+                borderTop: "1px solid #e2e8f0",
+                paddingTop: "24px",
+              }}>
+                <div style={{
+                  textAlign: "center",
+                  flex: 1,
+                }}>
+                  <div style={{
+                    fontSize: "14px",
+                    color: "#94a3b8",
+                    marginBottom: "8px",
+                  }}>
+                    Members
+                  </div>
+                  <div style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "#1e293b",
+                  }}>
+                    {channel.memberCount.toLocaleString()}
+                  </div>
+                </div>
+                <div style={{
+                  textAlign: "center",
+                  flex: 1,
+                }}>
+                  <div style={{
+                    fontSize: "14px",
+                    color: "#94a3b8",
+                    marginBottom: "8px",
+                  }}>
+                    Created by
+                  </div>
+                  <div style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "#1e293b",
+                  }}>
+                    {channel.host.displayName}
+                  </div>
+                </div>
+              </div>
+              <div style={{
+                background: "#3b82f6",
+                color: "white",
+                borderRadius: "8px",
+                padding: "12px 24px",
+                fontWeight: "bold",
+                marginTop: "20px",
+                display: "inline-block",
+                textAlign: "center",
+                width: "200px",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}>
+                Join Channel
+              </div>
             </div>
           </div>
-        </body>
-      </html>
-    `;
-    
-    // Return the HTML directly
-    return new NextResponse(html, {
-      headers: {
-        "Content-Type": "text/html",
-      },
-    });
+          <div style={{
+            marginTop: "24px",
+            fontSize: "16px",
+            color: "#94a3b8",
+          }}>
+            Press "Back to List" to return to all channels
+          </div>
+        </div>
+      ),
+      {
+        width: 1200,
+        height: 630,
+      }
+    );
   } catch (error) {
     console.error("Error generating channel detail:", error);
     
-    // Generate a fallback HTML
-    const errorHtml = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <title>Error</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 0;
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-              background-color: #dc2626;
-              color: white;
-              width: 100vw;
-              height: 100vh;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-            }
-            h1 {
-              font-size: 32px;
-              margin-bottom: 16px;
-            }
-            p {
-              font-size: 18px;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>Channel Not Found</h1>
-          <p>The requested channel could not be found</p>
-        </body>
-      </html>
-    `;
-    
-    // Return the error HTML
-    return new NextResponse(errorHtml, {
-      headers: {
-        "Content-Type": "text/html",
-      },
-    });
+    // Return a simple error image
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "#dc2626",
+            color: "white",
+            fontFamily: "sans-serif",
+          }}
+        >
+          <h1 style={{ fontSize: "32px", marginBottom: "16px" }}>
+            Channel Not Found
+          </h1>
+          <p style={{ fontSize: "18px" }}>The requested channel could not be found</p>
+        </div>
+      ),
+      {
+        width: 1200,
+        height: 630,
+      }
+    );
   }
 }
 

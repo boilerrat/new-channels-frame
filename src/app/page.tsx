@@ -25,7 +25,6 @@ export async function generateMetadata(): Promise<Metadata> {
       ],
     },
     other: {
-      // Frame metadata
       "fc:frame": "vNext",
       "fc:frame:image": imageUrl,
       "fc:frame:post_url": `${baseUrl}/api/frame`,
