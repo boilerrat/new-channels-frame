@@ -101,27 +101,46 @@ export default async function Home() {
       </section>
       
       <section className="my-12 p-6 bg-gray-50 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">Test The Frame Image</h2>
+        <h2 className="text-2xl font-semibold mb-4">Test The Frame</h2>
         <p className="mb-4">
-          You can test how the frame image looks by viewing it directly:
+          You can test how the frame image and navigation work by using the links below:
         </p>
-        <div className="mt-4">
-          <a 
-            href={imageUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 underline"
-          >
-            View Frame Image
-          </a>
-        </div>
-        <div className="mt-4">
-          <img 
-            src={imageUrl} 
-            alt="Frame Preview" 
-            className="max-w-full h-auto rounded-lg border border-gray-200"
-            style={{ maxHeight: '315px' }}
-          />
+        <div className="mt-4 space-y-4">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Frame Image (Main View)</h3>
+            <a 
+              href={imageUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline block mb-2"
+            >
+              View Main Frame Image
+            </a>
+            <iframe 
+              src={imageUrl} 
+              className="w-full border border-gray-200 rounded-lg" 
+              style={{ height: '315px' }}
+            ></iframe>
+          </div>
+          
+          {channels.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold mb-2">Channel Detail View</h3>
+              <a 
+                href={`${baseUrl}/api/channel-image?id=${channels[0].id}`} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-blue-600 hover:text-blue-800 underline block mb-2"
+              >
+                View Channel Detail
+              </a>
+              <iframe 
+                src={`${baseUrl}/api/channel-image?id=${channels[0].id}`} 
+                className="w-full border border-gray-200 rounded-lg" 
+                style={{ height: '315px' }}
+              ></iframe>
+            </div>
+          )}
         </div>
       </section>
     </main>
