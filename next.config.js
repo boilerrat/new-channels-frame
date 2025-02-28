@@ -27,6 +27,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'api.screenshotone.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.shields.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'og.th.gl',
+      }
     ],
     unoptimized: true,
   },
