@@ -95,6 +95,31 @@ export default async function Home() {
           </code>
         </div>
       </section>
+      
+      <section className="my-12 p-6 bg-gray-50 rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4">Test The Frame Image</h2>
+        <p className="mb-4">
+          You can test how the frame image looks by viewing it directly:
+        </p>
+        <div className="mt-4">
+          <a 
+            href={imageUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            View Frame Image
+          </a>
+        </div>
+        <div className="mt-4">
+          <img 
+            src={imageUrl} 
+            alt="Frame Preview" 
+            className="max-w-full h-auto rounded-lg border border-gray-200"
+            style={{ maxHeight: '315px' }}
+          />
+        </div>
+      </section>
     </main>
   );
 }

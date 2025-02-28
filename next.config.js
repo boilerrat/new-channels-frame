@@ -19,6 +19,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.imgur.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.screenshotone.com',
+      },
     ],
     unoptimized: true,
   },
