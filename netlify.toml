@@ -23,4 +23,15 @@
 [functions]
   included_files = ["node_modules/@vercel/og/**/*"]
   node_bundler = "esbuild"
-  external_node_modules = ["@vercel/og"] 
+  external_node_modules = ["@vercel/og"]
+
+# Redirects
+[[redirects]]
+  from = "/app"
+  to = "/"
+  status = 200
+
+[[redirects]]
+  from = "/app/*"
+  to = "/:splat"
+  status = 200 
