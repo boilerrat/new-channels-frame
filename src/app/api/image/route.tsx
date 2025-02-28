@@ -17,36 +17,32 @@ export async function GET(request: NextRequest) {
     const paginatedChannels = allChannels.slice(startIndex, endIndex);
     const totalPages = Math.ceil(allChannels.length / ITEMS_PER_PAGE);
     
-    // Get top channel names for display
-    const channelsList = paginatedChannels
-      .slice(0, 5)
-      .map(c => c.name)
-      .join(", ");
+    // Create channel info for display
+    const channelInfo = paginatedChannels.map((channel, index) => {
+      return `${index + 1}: ${channel.name}`;
+    }).join('\n');
     
-    // Generate a placeholder image with proper dimensions for Farcaster frames
-    // Use reliable placehold.co which works well with Netlify
-    const title = `New Farcaster Channels - Page ${page} of ${totalPages}`;
-    const description = `Featured: ${channelsList}`;
+    // Create text for the image
+    const titleText = `New Farcaster Channels - Page ${page} of ${totalPages}`;
+    const instructionText = "Press a button to select a channel";
+    const combinedText = encodeURIComponent(`${titleText}\n\n${channelInfo}\n\n${instructionText}`);
     
-    // Create text for the placeholder that includes title and channels
-    const placeholderText = encodeURIComponent(`${title}\n\n${description}`);
+    // Generate an image with the grid of channels
+    const imageUrl = `https://placehold.co/1200x630/1e293b/ffffff?text=${combinedText}`;
     
-    // Use a simple placeholder service with text overlay
-    const imageUrl = `https://placehold.co/1200x630/1e293b/ffffff?text=${placeholderText}`;
-    
-    // Redirect to the image URL
+    // Redirect to the image
     return NextResponse.redirect(imageUrl);
   } catch (error) {
     console.error("Error generating image:", error);
     
-    // Create a fallback image URL for error state
-    const fallbackUrl = `https://placehold.co/1200x630/dc2626/ffffff?text=Error+Loading+Channels`;
+    // Generate a fallback image on error
+    const fallbackText = encodeURIComponent("Error Loading Channels\n\nPlease try again later");
+    const fallbackUrl = `https://placehold.co/1200x630/dc2626/ffffff?text=${fallbackText}`;
     
-    // Redirect to the fallback image
     return NextResponse.redirect(fallbackUrl);
   }
 }
 
-// Set dynamic behavior for revalidation
+// Set dynamic behavior
 export const dynamic = "force-dynamic";
 export const revalidate = 60; // Revalidate every minute

@@ -29,8 +29,10 @@ export async function generateMetadata(): Promise<Metadata> {
       "fc:frame": "vNext",
       "fc:frame:image": imageUrl,
       "fc:frame:post_url": `${baseUrl}/api/frame`,
-      "fc:frame:button:1": "", // Empty for first page
-      "fc:frame:button:2": "Next",
+      "fc:frame:button:1": "",
+      "fc:frame:button:2": "Next ▶️", 
+      "fc:frame:button:3": "Channel 1",
+      "fc:frame:button:4": "Channel 2",
       "fc:frame:state": "page:1",
     },
   };
@@ -90,7 +92,9 @@ export default async function Home() {
 <meta property="fc:frame:image" content="${imageUrl}" />
 <meta property="fc:frame:post_url" content="${baseUrl}/api/frame" />
 <meta property="fc:frame:button:1" content="" />
-<meta property="fc:frame:button:2" content="Next" />
+<meta property="fc:frame:button:2" content="Next ▶️" />
+<meta property="fc:frame:button:3" content="Channel 1" />
+<meta property="fc:frame:button:4" content="Channel 2" />
 <meta property="fc:frame:state" content="page:1" />`}
           </code>
         </div>
