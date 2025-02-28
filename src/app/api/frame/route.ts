@@ -61,33 +61,35 @@ export async function POST(request: NextRequest) {
       return handleChannelDetailView(baseUrl, channel, page);
     }
     
-    // If no channel is selected, handle the main grid view
-    if (buttonIndex === 1 && page > 1) {
-      // Previous page button
-      page--;
-    } else if (buttonIndex === 2) {
-      // Next page button
-      page++;
-    } else if (buttonIndex >= 3 && buttonIndex <= 11) {
-      // Channel selection buttons (3-11 correspond to channels 0-8)
-      const channelIndex = buttonIndex - 3;
-      
-      // Fetch the channels to get the selected one
-      const allChannels = await fetchChannels();
-      const totalPages = Math.ceil(allChannels.length / ITEMS_PER_PAGE);
-      
-      // Ensure page is within valid range
-      page = Math.max(1, Math.min(page, totalPages));
-      
-      // Calculate which channels are on the current page
-      const startIndex = (page - 1) * ITEMS_PER_PAGE;
-      const paginatedChannels = allChannels.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-      
-      // Get the selected channel
-      const selectedChannel = paginatedChannels[channelIndex];
-      if (selectedChannel) {
-        // Show the channel detail view
-        return handleChannelDetailView(baseUrl, selectedChannel, page);
+    // If no channel is selected, handle the main grid view with pagination and channel selection
+    if (buttonIndex !== undefined) {
+      if (buttonIndex === 1 && page > 1) {
+        // Previous page button
+        page--;
+      } else if (buttonIndex === 2) {
+        // Next page button
+        page++;
+      } else if (buttonIndex >= 3 && buttonIndex <= 11) {
+        // Channel selection buttons (3-11 correspond to channels 0-8)
+        const channelIndex = buttonIndex - 3;
+        
+        // Fetch the channels to get the selected one
+        const allChannels = await fetchChannels();
+        const totalPages = Math.ceil(allChannels.length / ITEMS_PER_PAGE);
+        
+        // Ensure page is within valid range
+        page = Math.max(1, Math.min(page, totalPages));
+        
+        // Calculate which channels are on the current page
+        const startIndex = (page - 1) * ITEMS_PER_PAGE;
+        const paginatedChannels = allChannels.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+        
+        // Get the selected channel
+        const selectedChannel = paginatedChannels[channelIndex];
+        if (selectedChannel) {
+          // Show the channel detail view
+          return handleChannelDetailView(baseUrl, selectedChannel, page);
+        }
       }
     }
     
@@ -135,11 +137,9 @@ async function handleMainView(baseUrl: string, page: number) {
     buttons.push(""); // Empty button for layout consistency
   }
   
-  // Channel selection buttons - up to 9 channels can be shown
-  // We'll use numbers 1-9 as buttons to keep it simple
-  paginatedChannels.forEach((_, index) => {
-    buttons.push(`Channel ${index + 1}`);
-  });
+  // Channel selection buttons - use only channels 1 and 2 to stay within the 4 button limit
+  if (paginatedChannels.length > 0) buttons.push(`Channel 1`);
+  if (paginatedChannels.length > 1) buttons.push(`Channel 2`);
   
   // Fill remaining buttons with empty strings up to 4 total
   while (buttons.length < 4) {

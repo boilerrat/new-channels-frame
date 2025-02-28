@@ -1,4 +1,5 @@
-import { FrameRequest, Message } from '@farcaster/core';
+// Import nothing from @farcaster/core since we're implementing our own validation
+// No need for these: import { FrameRequest, Message } from '@farcaster/core';
 
 export interface FrameData {
   buttonIndex?: number;
