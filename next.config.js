@@ -34,6 +34,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'og.th.gl',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       }
     ],
     unoptimized: true,

@@ -17,38 +17,33 @@ export async function GET(request: NextRequest) {
     const paginatedChannels = allChannels.slice(startIndex, endIndex);
     const totalPages = Math.ceil(allChannels.length / ITEMS_PER_PAGE);
     
-    // Get channel names for the first 3 channels to display
-    const topChannels = paginatedChannels.slice(0, 3).map(c => c.name).join(", ");
+    // Get top channel names for display
+    const channelsList = paginatedChannels
+      .slice(0, 5)
+      .map(c => c.name)
+      .join(", ");
     
-    // Use og.th.gl for reliable Open Graph image generation
-    // Documentation: https://github.com/vercel-labs/og-image
-    const ogImageUrl = new URL("https://og.th.gl");
+    // Generate a placeholder image with proper dimensions for Farcaster frames
+    // Use reliable placehold.co which works well with Netlify
+    const title = `New Farcaster Channels - Page ${page} of ${totalPages}`;
+    const description = `Featured: ${channelsList}`;
     
-    // Set parameters for the OG image
-    ogImageUrl.searchParams.set("title", `New Farcaster Channels`);
-    ogImageUrl.searchParams.set("subtitle", `Page ${page} of ${totalPages}`);
-    ogImageUrl.searchParams.set("description", `Featured: ${topChannels}`);
-    ogImageUrl.searchParams.set("theme", "dark");
-    ogImageUrl.searchParams.set("bgColor", "1e293b");
-    ogImageUrl.searchParams.set("authorName", "Farcaster Channels Explorer");
+    // Create text for the placeholder that includes title and channels
+    const placeholderText = encodeURIComponent(`${title}\n\n${description}`);
     
-    // Add a timestamp to prevent caching issues
-    ogImageUrl.searchParams.set("t", Date.now().toString());
+    // Use a simple placeholder service with text overlay
+    const imageUrl = `https://placehold.co/1200x630/1e293b/ffffff?text=${placeholderText}`;
     
-    // Redirect to the generated image URL
-    return NextResponse.redirect(ogImageUrl.toString());
+    // Redirect to the image URL
+    return NextResponse.redirect(imageUrl);
   } catch (error) {
     console.error("Error generating image:", error);
     
-    // Create a fallback OG image URL for error state
-    const fallbackUrl = new URL("https://og.th.gl");
-    fallbackUrl.searchParams.set("title", "Error Loading Channels");
-    fallbackUrl.searchParams.set("subtitle", "Please try again later");
-    fallbackUrl.searchParams.set("theme", "dark");
-    fallbackUrl.searchParams.set("bgColor", "dc2626");
+    // Create a fallback image URL for error state
+    const fallbackUrl = `https://placehold.co/1200x630/dc2626/ffffff?text=Error+Loading+Channels`;
     
     // Redirect to the fallback image
-    return NextResponse.redirect(fallbackUrl.toString());
+    return NextResponse.redirect(fallbackUrl);
   }
 }
 
