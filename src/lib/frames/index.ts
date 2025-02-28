@@ -1,4 +1,16 @@
-import { getFrameMessage, FrameRequest, FrameValidationData } from '@farcaster/core';
+import { FrameRequest, Message } from '@farcaster/core';
+
+export interface FrameData {
+  buttonIndex?: number;
+  inputText?: string;
+  state?: string;
+}
+
+export interface ValidatedFrameMessage {
+  isValid: boolean;
+  message?: string;
+  frameData: FrameData;
+}
 
 /**
  * Creates a valid Farcaster Frame HTML response
@@ -49,22 +61,37 @@ export function createFrameHtml({
 }
 
 /**
- * Validates a Farcaster frame message
- * @param payload The raw request body
- * @returns Validated frame message or null if validation fails
+ * Simple Farcaster frame validation
  */
-export async function validateFrameMessage(payload: any): Promise<FrameValidationData | null> {
+export async function validateFrameMessage(payload: any): Promise<ValidatedFrameMessage | null> {
   try {
-    // Validate the frame message
-    const result = await getFrameMessage(payload);
-    
-    // If validation succeeded, return the result
-    if (result.isValid) {
-      return result;
+    if (!payload) {
+      console.error("No payload provided");
+      return null;
     }
     
-    console.error("Invalid frame message:", result.message);
-    return null;
+    // Extract trusted and untrusted data from the payload
+    const { untrustedData } = payload;
+    
+    if (!untrustedData) {
+      console.error("No untrustedData in payload");
+      return null;
+    }
+    
+    // Extract important fields
+    const { buttonIndex, inputText, state } = untrustedData;
+    
+    // Create frame data object
+    const frameData: FrameData = {
+      buttonIndex: buttonIndex ? Number(buttonIndex) : undefined,
+      inputText: inputText || undefined,
+      state: state || undefined
+    };
+    
+    return {
+      isValid: true,
+      frameData
+    };
   } catch (error) {
     console.error("Error validating frame message:", error);
     return null;

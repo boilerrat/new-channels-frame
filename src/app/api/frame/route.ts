@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
     }
     
     // Extract button index, input text, and state from the frame message
-    const { buttonIndex, inputText } = frameMessage.frameData;
-    const stateParam = inputText || frameMessage.frameData.state || "";
+    const { buttonIndex, inputText, state } = frameMessage.frameData;
+    const stateParam = inputText || state || "";
     
     // Parse state (format: "page:1" or "channel:xyz")
     let page = 1;

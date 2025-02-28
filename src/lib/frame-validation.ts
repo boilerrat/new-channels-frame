@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { FrameData, ValidatedFrameMessage } from "./frames";
 
 // Define the schema for frame message validation
 export const FrameMessageSchema = z.object({
@@ -14,25 +15,40 @@ export const FrameMessageSchema = z.object({
       fid: z.number(),
       hash: z.string(),
     }).optional(),
+    state: z.string().optional(),
   }),
   trustedData: z.object({
     messageBytes: z.string(),
   }).optional(),
 });
 
-// Type for the validated frame message
-export type FrameMessage = z.infer<typeof FrameMessageSchema>;
-
 /**
- * Validates a frame message using zod
- * @param body - The request body to validate
- * @returns The validated frame message or null if validation fails
+ * Simple Farcaster frame validation using Zod
  */
-export function validateFrameMessage(body: unknown): FrameMessage | null {
+export function validateFrameMessageWithZod(payload: unknown): ValidatedFrameMessage | null {
   try {
-    return FrameMessageSchema.parse(body);
+    const result = FrameMessageSchema.safeParse(payload);
+    
+    if (!result.success) {
+      console.error("Frame validation error:", result.error);
+      return null;
+    }
+    
+    const { untrustedData } = result.data;
+    
+    // Create frame data object
+    const frameData: FrameData = {
+      buttonIndex: untrustedData.buttonIndex,
+      inputText: untrustedData.inputText,
+      state: untrustedData.state
+    };
+    
+    return {
+      isValid: true,
+      frameData
+    };
   } catch (error) {
-    console.error("Frame validation error:", error);
+    console.error("Error validating frame message:", error);
     return null;
   }
-} 
+}
